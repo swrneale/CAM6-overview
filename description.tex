@@ -1,0 +1,33 @@
+\section{Scientific Configuration}
+There are fundamental changes in the representation of physical processes in CAM6 which are detailed below. 
+
+
+\subsection{Cloud Macrophysics and Turbulence}
+
+CAM6 replaces the shallow convection, planetary boundary layer and cloud macrophysics schemes in CAM5 with a new unified turbulence scheme, the Cloud Layers Unified By Binormals (CLUBB) scheme (ref)
+
+
+
+\subsection{Microphysics}
+
+Cloud microphysics in CAM6 uses version 2 of the \cite{Morrison08} scheme, described by \cite{gettelman15} and with mode performance shown \cite{gettelman15a}
+
+\begin{eqnarray}
+  \frac{\partial q_x}{\partial t} & = & -\frac{1}{\rho}\nabla\dot(\rho \mathbf{u} q_x) - \frac{1}{\rho}\frac{\partial(\rho V_{q_x}q_x)}{\partial z}+S_{q_x}  \\
+  \frac{\partial N_x}{\partial t} & = & -\frac{1}{\rho}\nabla\dot(\rho \mathbf{u} N_x) - \frac{1}{\rho}\frac{\partial(\rho V_{N_x}N_x)}{\partial z}+S_{N_x}
+\end{eqnarray}
+
+\subsection{Ice Microphysics}
+
+A number of changes have been made to the cloud microphysics for CAM6 to improve water vapor and ice clouds in the Upper Troposphere and Lower Stratosphere (UTLS) including: adding subgrid variability for ice growth, changing the minimum ice particle size, adjusting the fall velocity for small ice particles, and making corrections to ice nucleation. The most important of these changes is supporting subgrid variability by the addition of a scaling factor ($Q_{sfac}$) to the water vapor saturation required for cirrus growth. In CAM5, the ice cloud fraction began at a relative humidity threshold ($RH_{mini}$) of 0.8; however, the threshold for cloud growth was ice saturation (1.0). This inconsistency caused too little moisture to be condensed in the tropics by the cold trap resulting in too much water vapor entering the stratosphere. In CAM6, scaling the saturation threshold by $Q_{sfac}$ allows condensation growth to occur in part of the gridbox starting at $RH_{mini}$, improving stratospheric water vapor. To support smaller ice particles in the UTLS, the minimum ice particle size has been decreased from a diameter of 10 $\mu$m to 1 $\mu$m and the fall velocity has been adjusted assuming that small particles ($<$ 36 $\mu$m) have a bulk ice density, rather than the reduced density used for larger ice particles. Finally, several changes have been made to improve ice nucleation including: correcting the calculation of the number of dust ice nuclei (IN), moving heterogeneous IN from interstitial to cloud-borne aerosol following nucleation, and using the gridbox average relative humidity for homogeneous freezing rather than assuming all homogeneous freezing is in-cloud with a relative humidity of 1.0. Some initial support has been provided for Type II (ice) polar stratospheric clouds by allowing different cloud settings in the stratosphere and including homogeneous freezing of accumulation and coarse mode sulfate particles in the stratosphere. These changes are described in more detail in Bardeen et al. (2017).
+
+\subsection{Deep Convection}
+CAM6 retains the vast majority of the Zhang-McFarlane \citep{ZM} configuration for the representation of deep convection processes. This works almost entirely independent of the other moist process parameterizations, this includes an absence of any of the the new MG2 \citep{gettelman15} microphysical representations. The settings that control ZM are however used as major tunings parameters that optimizing the climate produced in CAM6 and more importantly CESM2. The optimizations are primarily for the global radiative balance of the climate, in particular the cloud radiative components, and also for precipitation distributions. The parameters used for this optimization include the autoconversion and evaporation of falling precipitation and the strength of convective momentum transports. As we will see in section XX changes in these parameters can have impacts on atmospheric climate that are comparable with the impact of new process parameterization.
+
+
+
+\subsection{Sub-grid Surface Drag}
+Beljaars
+\subsection{Aerosol}
+MAM4, black carbon
+\subsection{Further Parameterization Developments}
