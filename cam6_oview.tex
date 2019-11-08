@@ -13,7 +13,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% All questions should be e-mailed to latex@agu.org.
+% All questions should be e-mailed to latexagu.org.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -63,8 +63,19 @@
 %\usepackage{graphicx}
 %\usepackage[modulo]{lineno}
 
+\usepackage[%
+  color=gray
+ ,scale=20
+ ,placement=top
+]{background}
+
+\backgroundsetup{contents={DRAFT}}
+
 % Set to \draftfalse and it spaces lines for the journal, \draftrue compresses it for fewer printed pages
-\draftfalse
+\drafttrue
+
+%% Shortcuts %%
+\def\deg{$^\circ$}
 
 
 %-------------------------------
@@ -76,13 +87,13 @@
 \journalname{Journal of Advances in Modeling Earth Systems (JAMES)}
 \begin{document}
 
-\title{The NCAR/DOE Community Atmosphere Model, version 6 (CAM6): Scientific Configuration and Simulation Fidelity}
+\title{The NCAR Community Atmosphere Model, version 6 (CAM6): Scientific Configuration and Simulation Fidelity}
 
 \input{authors.tex}
 
 \linenumbers
 \modulolinenumbers[1]
-Hello you hello you
+
 \input{abstract.tex}
 \input{introduction.tex}
 \input{description.tex}
@@ -94,6 +105,13 @@ Hello you hello you
 
 \input{acknowledgements.tex}
 
+%% References %%
+\bibliographystyle{BibTeX/agufull08}.
+\bibliography{BibTeX/CAM6_oview}
+
+%% Tables %%
+\input{tables.tex}
+
 %% Figures %%
 \input{figures.tex}
 
@@ -103,8 +121,6 @@ Hello you hello you
 %%  REFERENCE LIST AND TEXT CITATIONS
 %
 
-\bibliographystyle{BibTeX/agufull08}.
-\bibliography{BibTeX}
 
 % For supplementary material like Cecile's table
 %\input{supplementary.tex}

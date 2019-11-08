@@ -1,6 +1,19 @@
 \section{Sensitivity AMIP Experiments}
+\label{sec:sensitivities}
 
-To investigate the underlying causes for changes in model simulation between CAM5 and CAM6 we performed a suite of experiments targeting configuration dependencies and the primary model choices that were made during the development process.
+To investigate the underlying causes for changes in model simulation between CAM5 and CAM6 we performed a suite of experiments targeting configuration dependencies and the primary model choices that were made during the development process. This collection of 'revert' experiments are intended to traverse as much of the configuration changes related to atmospheric processes as possible. We identify modifications responsible for major changes to the simulation performance. As will become apparent many of the sensitivities in the simulations arise, not solely due to their inclusion or exclusion in simulations, but because of parameter setting choices linked to the scheme and because of parameter choices linked to a separate scheme that were employed to assist overall model tuning.
+
+Fig XX shows the dependencies of tropical precipitation on a number of the revert experiments. Firstly, It is clear that there is a wide range in RMS error of at least 50\% across CAM releases and CAM6 sensitivity experiments and that the correlation and RMSE patterns are positively correlated. On the whole recent release versions are more skillful than past model releases. This is very apparent in JJA, when errors are largest and presumably room for improvement is greatest. From a coupled perspective CESM2 is a marked success given that there was no improvement between CCSM4 and CESM1, but a significant increases in skill is seen in CESM2. Seasonally the character between the coupled and uncoupled simulation is different in CESM2 with greater RMSE/Corr for the uncoupled model in DJF and yet the opposite signal for JJA with a more skillful, for the most part, coupled simulation. 
+
+Fig XX shows the dependencies of tropical precipitation on a number of the revert experiments. Firstly, It is clear that there is a wide range in RMS error of at least 50\% across CAM releases and CAM6 sensitivity experiments and that the correlation and RMSE patterns are positively correlated. On the whole recent release versions are more skillful than past model releases. This is very apparent i
+
+From the revert experiments it is clear that the scheme and tuning parameter selection experiments occupy much of the correlation/RMSE phase space among the released model versions. It is apparent that the CAM5 release climate (C5) can largely be recovered (rC5) by reverting all parameters and physical parameterizations to those used in CAM5, but within the CAM6 release code. This allows to use the revert experiments to identify the most likely parameter and parameterization differences  responsible for CAM6 (C6) and CAM5 climate differences. For tropical precipitation, there are multiple configuration changes that may explain the shift to a more skillful simulation (C6 to C5). For DJF, differences are smaller, but many changes include reverting to MAM3 (rM3), changing to the SB2001 autoconversation configuration (rSB). For JJA. a monsoonaly dominated climate, biases are greater and the revert experiments are spread wider. The dominant revert change would seem to come from the ZM capeten stability change (rCTEN), which would seem to have a similar impact when all tunable parameters are reverted back to CAM5 values (rC5P). Conversely if just the ZM tunable parameters are reverted, this leads to an improved precipitation skill and pattern in both seasons, so there are clearly non-linear and compensating effects, which is to be expected. Also of interest is the configuration that reverts back to the pre-tuned CESM2 version (rCP0). Precipitation is improved
 
 
+
+Unlike in the past JJA precipitation has no improved markedly than in DJF
+
+
+
+\subsection{Ice Microphysics}
 
