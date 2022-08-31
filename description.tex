@@ -1,37 +1,82 @@
 \section{Scientific Configuration}
 \label{sec:description}
-There are fundamental changes in the representation of physical processes in CAM6 which are detailed below. CAM5 replaced or upgraded many of its physical parameterizations from the previous CAM4 model version, including boundary layer turbulence, shallow convection, cloud macrophysics, cloud microphysics radiation, mountain stress and diagnostic replaced by prognostic aerosols. CAM6 sees a similar comprehensive upgrade to the physics suite, including the replacement of shallow convection, boundary layer turbulence, cloud macrophysics, with modifications to microphysics, deep convection, mountain stress and the aerosol scheme. The major chnages to the parameterizations are described briefly here  
-
+Fundamental changes in the representation of physical processes were made for CAM6. These include complete replacements of boundary layer turbulence, shallow convection, cloud macrophysics, and surface stress due to sub-grid scale orography parameterizations. In addition, significant changes were made to the cloud microphysics, aerosol physics and deep convection. Also, of note are the values of calibration or tuning parameters of parameterization schemes that remain from CAM5. They are not considered a modification to parameterizations themselves here, but many take different values to CAM5 mostly in an effort to produce skillful improvements in the CAM6 climate. The individual roles of these parameterization and tuning changes are examined in Section \ref{sec:sensitivities}. Of the primary physics parameterizations only the Rapid Radiative Transfer Scheme for GCMs \citep[RRTMG,][]{Iacono2008,Mlawer1997} remains largely unchanged. 
 
 \subsection{Cloud Macrophysics and Turbulence}
 
-In CAM6 the existing CAM5 shallow convection REF, planetary boundary layer REF and cloud macrophysics REF schemes in CAM5 with are replaced with a new unified turbulence scheme, the Cloud Layers Unified By Binormals \citep[CLUBB,][]{Golaz2002a,Golaz2002b}. CLUBB is new approach to the parameterization of these process that provided an estimate of model tendencies as as a higher order solution to the turbulence equation. 
+Shallow convection \citep{Bretherton2004}, planetary boundary layer \citep{Bretherton2009} and cloud macrophysics \citep{Park2014} schemes in CAM5 are replaced with a new unified turbulence scheme, the Cloud Layers Unified By Binormals \citep[CLUBB,][]{Golaz2002a,Golaz2002}. CLUBB determines these processes as part of higher order solutions to the 3D turbulence equation. Where, for example, vertical velocity variance $w'^{2}$ evolution is given by:
+
+%
+\begin{eqnarray}
+  \frac{\partial\overline{w'^2}}{\partial 
+t}=-\overline{w}\frac{\partial\overline{w'^2}}{\partial z}-\frac{\partial\overline{w'^3}}{\partial z}-2\overline{w'^2} \frac{\partial\overline{w}}{\partial z}+\frac{2g}{\theta_0}\overline{w'\theta_v'}-\frac{2}{\rho}\overline{w'\frac{\partial p}{\partial z}}-\epsilon_{ww}
+\end{eqnarray}
+
+with second order source terms of vertical advection, third order gradients, gradient mean advection, buoyancy generation, pressure related terms and dissipation.
+
+Solutions are achieved by describing vertical velocity, $w$, liquid water potential temperature, $\theta_l$ and total specific water content $q_t$ within
+assumed joint Probability Distribution Functions (PDFs) 
+
+\begin{eqnarray}
+  \overline{{w'}\,{\theta_l'^m}\,{ q_t'^n}}  =  \int\int\int(w-\overline{w})^l(\theta_l-\overline{\theta_l})^m(q_t-\overline{q_r})^n P(w,\theta_l,q_t)\,dw\,d\theta_l\,dq_t
+\end{eqnarray}
+
+ and in this implementation are specifically characterized by two Gaussian PDFs. They provide a self consistent description of mean and higher order quantities in moist turbulent properties. A previously implemented configuration in a pre-cursor to CAM \citep[CAM5.5, ][]{Bogenschutz2018} has been shown to represent effectively the skewness in properties associated with deeper convection, as in \citep{Bogenschutz2010}. In comparison to the separate schemes of CAM5 the calculations for liquid cloud fraction, total liquid, variance and eddy flux variances are self consistent.
 
 
 
 \subsection{Microphysics}
+\subsubsection{Liquid Processes}
 
-Cloud microphysics in CAM6 uses version 2 of the \cite{Morrison08} scheme, described by \cite{Gettelman2015} and with mode performance shown \cite{Gettelman2015a}. It is updated with description 
+Cloud microphysics uses version 2 of the \cite{Morrison08} scheme, described by \cite{Gettelman2015} and with model performance shown in \cite{Gettelman2015a}. The Major change is that precipitation species are now handled in a prognostic rather than diagnostic manner. Mass and number concentrations of ice (snow) and liquid (rain) are thus determined from the following budget approximations:
 
 \begin{eqnarray}
   \frac{\partial q_x}{\partial t} & = & -\frac{1}{\rho}\nabla\dot(\rho \mathbf{u} q_x) - \frac{1}{\rho}\frac{\partial(\rho V_{q_x}q_x)}{\partial z}+S_{q_x}  \\
   \frac{\partial N_x}{\partial t} & = & -\frac{1}{\rho}\nabla\dot(\rho \mathbf{u} N_x) - \frac{1}{\rho}\frac{\partial(\rho V_{N_x}N_x)}{\partial z}+S_{N_x}
 \end{eqnarray}
+where $q_x$ and $N_x$ are the mean and number concentration of species $x$ respectively. 
 
-\subsection{Ice Microphysics}
+CLUBB is sub-stepped within the microphysics in order to maintain stability within the parent full physics timestep of 30 minutes, a period much longer than for which the scheme was developed \citep{Golaz2002}. It is further required to avoid spurious oscillations seen previously \citep{Zheng2017}  Substepping can vary, but in the default configuration there are three instantiations of CLUBB per MG2 call, and one MG call per physics timestep.
+
+\subsubsection{Ice Processes}
 
 A number of changes have been made to the cloud microphysics for CAM6 to improve water vapor and ice clouds in the Upper Troposphere and Lower Stratosphere (UTLS) including: adding subgrid variability for ice growth, changing the minimum ice particle size, adjusting the fall velocity for small ice particles, and making corrections to ice nucleation. The most important of these changes is supporting subgrid variability by the addition of a scaling factor ($Q_{sfac}$) to the water vapor saturation required for cirrus growth. In CAM5, the ice cloud fraction began at a relative humidity threshold ($RH_{mini}$) of 0.8; however, the threshold for cloud growth was ice saturation (1.0). This inconsistency caused too little moisture to be condensed in the tropics by the cold trap resulting in too much water vapor entering the stratosphere. In CAM6, scaling the saturation threshold by $Q_{sfac}$ allows condensation growth to occur in part of the gridbox starting at $RH_{mini}$, improving stratospheric water vapor. To support smaller ice particles in the UTLS, the minimum ice particle size has been decreased from a diameter of 10 $\mu$m to 1 $\mu$m and the fall velocity has been adjusted assuming that small particles ($<$ 36 $\mu$m) have a bulk ice density, rather than the reduced density used for larger ice particles. Finally, several changes have been made to improve ice nucleation including: correcting the calculation of the number of dust ice nuclei (IN), moving heterogeneous IN from interstitial to cloud-borne aerosol following nucleation, and using the gridbox average relative humidity for homogeneous freezing rather than assuming all homogeneous freezing is in-cloud with a relative humidity of 1.0. Some initial support has been provided for Type II (ice) polar stratospheric clouds by allowing different cloud settings in the stratosphere and including homogeneous freezing of accumulation and coarse mode sulfate particles in the stratosphere. These changes are described in more detail in Bardeen et al. (2017).
 
 \subsection{Deep Convection}
-CAM6 retains the vast majority of the Zhang-McFarlane \citep{ZM} configuration for the representation of deep convection processes.  The settings that control ZM are however used as major tunings parameters that optimizing the climate produced in CAM6 and more importantly CESM2. The optimizations are primarily for the global radiative balance of the climate, in particular the cloud radiative components, and also for precipitation distributions. The parameters used for this optimization include the autoconversion and evaporation of falling precipitation and the strength of convective momentum transports. As is apparent in section \ref{sec:sensitivities}, changes in these parameters can have impacts on atmospheric climate that are comparable with the introduction of new process parameterization.
-
-
+CAM6 retains the vast majority of the \cite{Zhang1995} configuration for the representation of deep convection processes.  The settings that control ZM are however used as major tuning parameters that optimize the climate produced in CAM6 and more importantly coupled versions of CESM2. The optimizations are primarily for the global radiative balance of the climate, in particular the cloud radiative components, and also for precipitation distributions. The parameters include the autoconversion and evaporation of falling precipitation efficiencies and the strength of convective momentum transports. As is apparent in section \ref{sec:sensitivities}, changes in these parameters can have impacts on atmospheric climate that are comparable with the introduction of new process parameterization.
 
 \subsection{Sub-grid Surface Drag}
-Beljaars
-\subsection{Aerosol}
-MAM4, black carbon
-\subsection{Addtional Parameterization Developments}
+An update surface drag scheme based on \cite{Beljaars2004} replaces the simple Turbulent Mountain Stress \cite[TMS, ][]{Richter2010} scheme which simulated an effective near-surface drag, due to sub-grid scale variations of orographic roughness. Whereas TMS was applied to the lowest model level only, \cite{Beljaars2004} is applied over a number of levels based on a spectral integral of the impact of orographic heights, represented as an exponential height decay in the stress
+\begin{eqnarray}
+  F_x=-\alpha\beta C_{md} C_{corr}|U(z)|U(z)2.109e^{-(z/1500)^{1.5}}a_2z^{-1.2}, 
+\end{eqnarray}
+
+\subsection{Aerosols}
+The modal aerosol model representation is retained for CAM6. The 3-mode implementation from CAM5 \citep[MAM3, ][]{Liu2012} is augmented with an additional mode representation \citep{Liu2016}. This accounts explicitly for the microphysical ageing of primary carbonaceous aerosols in the atmosphere. Specifically the extra mode accounts for primary organic matter (POM), black carbon (BC) and there associated number characteristics. The mode properties interact with the existing accumulations mode through condensation an coagulation. In isolation this change is able to increase the concentration of organic matter by 40\% remote from major source regions \citep{Liu2016}. Polar regions in particular see a beneficial increase in burdens particular in the colder seasons. However, these improvements exist against the background of circulation dependent biases seen in previous versions of CAM with MAM3 \citep{Ma2013}.
+
+Specific to the representation of dust, between CAM5 and CAM6 there was a switch in the mode size parameters for the coarse mode (mode 3).  In order to improve the performance of the stratospheric aerosols, the sigma (width of the coarse mode) as decreased from 1.8 to 1.2. In addition, the edges of the coarse mode were moved to be more limited, and the number mean diameter was moved  from 2.0 to 0.9. These changes impact the properties of the coarse mode aerosols in the troposphere as well (Li et al., in prep.,10.5194/acp-2020-547 ).  The dust and sea salt direct radiative interactions are more negative by ~-0.40W/m2 for both aerosols, because of the smaller size assumed for the aerosols for some interactions (Li et al., in prep. 10.5194/acp-2020-547).
+
+\subsection{Additional Developments and Relevant Changes}
+
+Formulation of the spectrum of orographically generated waves continues to follow the scheme of \citep{McFarlane1987}. In CAM6 it uses information using ridge orientation derived from the underlying orographic dataset. This now determines the orientation of the applied drag force. The use of ridge height estimates also allows the application of form drag following the methodology of \cite{Scinocca2000}, which can account for high drag situations e.g., during down slope wind events.
 
 \subsection{Dynamical Core and Resolution}
-Although, CAM6 retains the hydrostatic, finite volume (REF LIN, REF LIN2) dynamical core with a resolution close to 1$^\circ$, an option for the spectral element dyncmial core is now available (REF PETER), but has not bee analyzed here. A modest increase in the vertical resolution from 30 to 32 levels has been applied, but these levels are in the upper troposphere and designed to exactly coincide with WACCM6 level locations in order to provide similar resolutions for the string vertical gradients and equally represent specific processes that at least begin there, such as the tape recorder effect. 
+Although, CAM6 retains the hydrostatic, finite volume \citep{Lin1996,Lin2004} dynamical core with a resolution close to 1$^\circ$, an option for the spectral element dynamical core is now available \citep{Lauritzen2018}, but has not bee analyzed here. A modest increase in the vertical resolution from 30 to 32 levels has been applied, but these levels are in the upper troposphere and designed to exactly coincide with WACCM6 level locations in order to provide similar resolutions for the string vertical gradients and equally represent specific processes that at least begin there, such as the tape recorder effect. And allow simultaneous climate tuning \citep{Gettelman2019}.
+
+\subsection{Datasets}
+Of known impact on recent CAM simulations is the transition from a simple interpolation of the USGS 30-second digital orographic height dataset \citep[GTOPO30,][]{Gesch1999} to the Global multi-resolution terrain elevation data 2010 \citep[GMTED2010,][]{Danielson2011} and using a more spectrally consistent generation of mean and height variances \citep{Lauritzen2015} used as boundary forcing in the gravity wave drag and surface stress \citep{Beljaars2004} parameterizations. The core set of forcing data also changes from the CMIP5 \citep{Lamarque2010} recommended source to the CMIP6 source \citep{Feng2020}. A notable change is that a number of datasets with decadal time frequency now have annual frequency in CMIP6, as well as seasonal detail added to annual variables.
+
+\subsection{Model Tuning Parameters}
+Tuning parameters can often influence the climate performance of a GCM to the same extent as core parameterization choices. In particular they are used as calibration or 'tuning' tools to produce a energetically consistent climate for climate change studies. A common practice for CESM and many other models \citep{Schmidt2017} is to produce a net zero energy budget (combined long wave and short wave radiation components) at the top of the model atmosphere domain or at the lid, as the default version of the model \citep{Danabasoglu2020}.
+
+-GHG dataset
+
+-Sea salt bins
+-Deposition
+-CLUBB liquid supersat problems.
+-Ozone chem (obs versus WACCM)
+-Background volcanics
+-CLM4.5?
+
+-Sea spray (salt and organics) do not contribute to INP and also organics are not included
+-Organics are being put int E3SM

@@ -1,9 +1,53 @@
 \section{Sensitivity AMIP Experiments}
 \label{sec:sensitivities}
 
-To investigate the underlying causes for changes in model simulation between CAM5 and CAM6 we performed a suite of experiments targeting configuration dependencies and the primary model choices that were made during the development process. This collection of 'revert' experiments are intended to traverse as much of the configuration changes related to atmospheric processes as possible. We identify modifications responsible for major changes to the simulation performance. As will become apparent many of the sensitivities in the simulations arise, not solely due to their inclusion or exclusion in simulations, but because of parameter setting choices linked to the scheme and because of parameter choices linked to a separate scheme that were employed to assist overall model tuning.
+Medeiros Paper (2016)
 
-Fig XX shows the dependencies of tropical precipitation on a number of the revert experiments. Firstly, It is clear that there is a wide range in RMS error of at least 50\% across CAM releases and CAM6 sensitivity experiments and that the correlation and RMSE patterns are positively correlated. On the whole recent release versions are more skillful than past model releases. This is very apparent in JJA, when errors are largest and presumably room for improvement is greatest. From a coupled perspective CESM2 is a marked success given that there was no improvement between CCSM4 and CESM1, but a significant increases in skill is seen in CESM2. Seasonally the character between the coupled and uncoupled simulation is different in CESM2 with greater RMSE/Corr for the uncoupled model in DJF and yet the opposite signal for JJA with a more skillful, for the most part, coupled simulation. 
+To investigate the underlying causes for climate simulation changes between CAM5 and CAM6, we perform a suite of experiments targeting configuration dependencies and the primary model choices that were made during the development process. This collection of 'revert' experiments are intended to traverse as much of the configuration changes related as possible. This does not cover everything, and in particular we choose to focus in the atmosphere changes only by retaining the CLM6 land model for all simulations, which is the default in CAM6. As will become apparent many of the sensitivities in the simulations arise, not solely due to their inclusion or exclusion in simulations, but because of parameter setting choices linked to the scheme and because of parameter choices linked to a separate scheme that were employed to assist overall model tuning.
+
+The revert experiments described here are those most relevant to tropical precipitation processes. Reverting back to CAM5 physics (rC5p) is able to recover much of the of CAM5 (C5), implying the climate changes in the revert experiments dominate over other sensitivities of the model. Any differences that do occur are focused over the land mass regions in JJA, which are a reflection of the different monsoon land surface response between CLM4 and CLM5.
+
+-Largest bias in DJF on equator in W. Ind Ocn.
+
+\subsection{Mean Sensitivities}
+
+The variation in climate among the CAM and CESM version is not always linear or towards improvement as we have seen in previous sections. Seasonal sensitivities from individual revert experiments can easily be a large as differences in the major model releases.
+
+
+The simulation that stands out from all others is when the SSTs are prescribed from the fully coupled experiments in a similar AMIP configuration (CE2sst). This is not strictly a revert experiment, but illustrates the point that the coupled climate, or at least in this case the response to coupled SSTs dominates over any parameterization sensitivities we discuss here. 
+
+In DJF the difference between CAM6 and CAM5 is a systematic reduction in the tropical bias between around 0.5 and 1.0 $mm/day$. Interestingly, the latitudes of the maximum bias (10\deg N and 20\deg S) are also were the simulation sensitivities are the greatest. Consequentially, the spread among the simulations tends to be magnitude rather than location base
+
+
+ At the core of the Northern ITCZ bias, a number of revert experiments lead to an increase in precipitation. Reverting to the deep convective scheme settings (rZMc) represents the largest parameterization sensitivity, with a slight equatorward shift of the peak bias. However, reverting tuning parameters from CAM6 to CAM5, either with or without macro-micro substepping (rC5p,rC5pm), has the largest impact on recovering the CAM5 climate. 
+ 
+ This in combination, with the switch back to the UW scheme (rUWp), is able reproduce the CAM5 profile very closely. This pairing is important given that reverting just the UW scheme (rUW), results in a climate that is actually drier nearer the equator than in CAM6. During this period rMG1 is mostly inconsequential.
+ 
+ 
+in JJA, Surprisingly, the greatest climate sensitivity appears to arise from reverting to the single moment Morrison Gettelman microphysics scheme (rMG1). However, that change does not easily explain the differences between CAM5 and CAM6, but it does lead to a very large 1.3 $mm/day$ increase, nearly doubling the existing CAM6 bias in the northern sub-tropics during JJA. Regionally, this bias is manifesting as an intensification of the Indian monsoon well into the west Pacific, resulting in the poorest seasonal rainfall skill of any revert configuration. 
+
+Reverting to the CAM5 deep convection configuration (rZMc) degrades both correlation an RMSE, and this switch is thought to control much of the convection-based rainfall through the tropics. For the other experiments, no one configuration change is uniquely responsible for the difference in performance between CAM5 and CAM6. Revert to UW has the greatest impact, degrading to the performance in CAM4. In the absence of any parameterization change at all, changing the setup or 'tuning' parameters for convection, cloud and  microphysics (rC5p) can have an equivalent effect as changing parameterization. Even if, in addition to this, the sub-cycling that  requires the macrophysics to be called 3 times more frequently than the microphysics is removed (rC5pm) the effects on the skill are profound. In northern summer (JJA), much of the relationships among model configurations change significantly. 
+
+Given the influence of monsoonal circulations over land the version of the land model (CLM5 or CLM6) may have a role to play. 
+
+The coupled CESM2 simulation (CE2) is superior to CAM6 in correlations, and clearly the SSTs are the primarily driver of this in the coupled system since applying the historical SSTs from the coupled model into CAM6 (CE2sst), results in a similar performance as CESM2. Overall the RMSE is lower for the simulations than during DJF. This is a reflection of persistent central ITCZ wet bias, and monsoon based Indian Ocean precipitation biases, both of which have improved markedly from CAM4. Using the CAM5 parameter settings of the ZM scheme (rZMp), and using settings from an initial version of CESM2 (rCE2i) show significantly better simulations skill. rCE2i is a specific CAM6 configuration when developing CESM2 that gave a skillful configuration above what is seen in the release for CAM6. The reason for this would seem to be due to the development that was performed in a fully coupled versus atmosphere-only configurations. A certain degree of tuning for CAM was degraded in order to achieve a more acceptable coupled simulation (REF CESM2) and to compensate for excessive cooling seen in historical simulations with updated aerosol emissions for CMIP6. The configuration in rCEi most notably includes the REF SB2001 autoconversion representation, which was changed for the REF KK scheme due to its unacceptable influence on low-cloud properties. During this season reverting to MG1 (rMG1) results in the poorest degradation of skill, which can be attributed to an excessive wet bias over the ocean regions through the Indo-Pacific monsoon regions, and this is reflected in the larger column water vapor biases in throughout the same regions compared to CAM6. MG2 exhibits a smaller accretion to autoconversion ratio with prognostic precipitation \cite{gettelman2015} and so it may be expected that stronger precipitation would result from humid and high cloud water regions associated with the Monsoon oceanic precipitation.
+
+The relationship among the simulations differs markedly for tropical precipitation over land. In general the skill metrics are more widely spread across release model versions and a subset of revert experiments show, somewhat paradoxically, significant improvements in measures of skill compared to CAM6. in DJF, changing the tuning parameter set back to CAM5 values and either excluding (rC5p) or including (rC5pm) CLUBB/MG2 sub-cycling increases correlation and reduces RMSE by around 25\%, which is greater than the CAM4 to CAM6 change. For the parameterization changes rZMc would seem to make the greatest difference, which is consistent with the response of deep convection to water limitations in the vertical profile. In JJA, release models have seen the greatest improvement over time, where correlation patterns have improved by 0.15, and RMSE has reduced by 30\%. Since much of the improvement is retained when reverting to CAM5 (rC5), it is indicates strongly that recent improvements in CLM contribute to the CAM6 improved skill scores.
+
+
+Little sensitivity in LWCF, except UW much stronger and MG1 weaker.
+
+
+
+
+
+It is clear that there is a wide range in RMS error of at least 50\% across CAM releases and CAM6 sensitivity experiments and that the correlation and RMSE patterns are positively correlated. On the whole recent release versions are more skillful than past model releases. This is very apparent in JJA, when errors are largest and presumably room for improvement is greatest. From a coupled perspective CESM2 is a marked success given that there was no improvement between CCSM4 and CESM1, but a significant increases in skill is seen in CESM2. Seasonally the character between the coupled and uncoupled simulation is different in CESM2 with greater RMSE/Corr for the uncoupled model in DJF and yet the opposite signal for JJA with a more skillful, for the most part, coupled simulation. 
+
+
+
+
+
+
 
 Fig XX shows the dependencies of tropical precipitation on a number of the revert experiments. Firstly, It is clear that there is a wide range in RMS error of at least 50\% across CAM releases and CAM6 sensitivity experiments and that the correlation and RMSE patterns are positively correlated. On the whole recent release versions are more skillful than past model releases. This is very apparent i
 
@@ -15,5 +59,20 @@ Unlike in the past JJA precipitation has no improved markedly than in DJF
 
 
 
-\subsection{Ice Microphysics}
+\subsection{Regional Sensitivities}
+Story: Low-level cloud push pull differences over sub-topical regions (Cloud), and higher lat. Precipitation over the tropical Indian Ocean
+MG physics over the southern ocean. Dynamics: Upper troposphere jet modifications tuning and UW, ZM: Humidity but not much else!
 
+PRECT
+The major regional differences between CAM5 and CAM6 precipitation occur in the Northern Hemisphere Summer (JJA). The difference between CAM6 (C6) and CAM5 (C5) precipitation (Fig XX), and for other fields is well represented by reverting the physics in the CAM6 model back to CAM5 (rC5).
+
+
+SWCF
+Short Wave Cloud Forcing exhibits many regional modification upon reverting to a subset of important CAM5 settings in Fig. \ref{f_revert_PRECT_1D}. Reverting back to CAM5 physics (rC5) captures the primary differences between CAM5 and CAM6, namely a general increase in SWCF magnitude throughout the tropics and sub-tropics, with an decrease in strength over the storm track regions, and particularly over the southern ocean. On the whole these chnages can be ascribed to the switch to CLUBB and MG2 microphysics. 
+
+This reflects the CAM6 and CESM2 optimization task of retaining low cloud and strong SWCF, particularly over the southern ocean.
+
+LWCF a bit
+AODVIS
+U
+The momentum budget, particularly in the troposphere and lower stratosphere, is impacted by a number of changes between CAM5 and CAM6. As see in Fig XX, and unline many other improvements, significant degradation is seen in the momentum budget in CAM6. Revert to CAM5 physics 

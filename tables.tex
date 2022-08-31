@@ -1,58 +1,58 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Table of control Experiments %%
+
 \begin{table}[t]
-\caption{Summary details of the CAM and CESM experiments analyzed using CAM3, CAM4 and intermediate development model versions.}\label{t1}
+\caption{Summary details of simulations from released versions of CAM and CESM (covering 1979-2005)}\label{t1}
 \begin{center}
-\begin{tabular}{cccccrrcrc}
-\hline\hline
-$model$ & $Short Description$ &$SST$ & $Description/reference$ \\
+\begin{tabular}{cccc}
 \hline
-CAM6       & C6                        & AMIP     & Control  \\
-CAM5       & C5                        & AMIP     & Control  \\
-CAM4       & C4                        & AMIP     & Control  \\
-CESM2      & CE1                       & Coupled  & Control  \\
-CESM1      & CE2                       & Coupled  & Control  \\
-CCSM4      & CC4                       & Coupled  & Control  \\
-\hline
-CAM6       & C6C5                      & AMIP     & using -phys cam5  \\
-CAM6       & C6UW                      & AMIP     & Revert PBL and ShCU to UW \\
-           &                           &          & and large-scale cloud back to Park, 2009 scheme    \\
-CAM6       & C6MG1                     & AMIP     & Revert to MG1 microphysics  \\
-CAM6       & C6SB                      & AMIP     & Revert to Seifert and Behang (2008) autoconverstion   \\
-CAM6       & C6M3                      & AMIP     & Revert to MAM3 modal aerosol scheme  \\
-CAM6       & C6GW                      & AMIP     & Revert to   \\
-CAM6       & C6CP0                     & AMIP     & Revert to pre-tuned CESM2 coupled parameters  \\
-CAM6       & C6C5P                  & AMIP     & Revert to CAM5 tunable parameters  \\
-CAM6       & C6C5Z                  & AMIP     & Revert to CAM5 ZM tunable parameters  \\
+Name & Description & SST  & Forcing Use Case \\
+\hline 
+C6 & CAM6 release                           & AMIP     & Historical  \\
+C5 & CAM5 release                           & AMIP     & Historical. \\
+C4 & CAM4 release                           & AMIP     & Historical  \\
+CE2 & CESM2 release                         & Coupled  & Historical  \\
+CE1 & CESM1 release                         & Coupled  & Historical  \\
+CC4 & CCSM4 release                         & Coupled  & Historical  \\
 \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-%% PARAMETER SETTINGS TABLE (Cecile) %%
+\clearpage
+%% Table of revert experiments %%
 
-
-\begin{sidewaystable}
-\caption{Detailed parameter settings for CAM sensitivty experiments}
-\begin{tabular}{cccccrrcrc}
-\hline\hline
-$Name$ & $Description$ &$SST$ & $Analysis Period$ \\
+\begin{table}[t]
+\caption{Summary details of simulations from CAM6 revert experiments, reverting a particular parameterizations, tuning parameter or forcing dataset back to CAM5 settings (covering 1979-2005)}\label{t1}
+\begin{center}
+\begin{tabular}{cccc}
+\multicolumn{3}{l}{} \\
 \hline
-CAM3 (T42)       & Spectral low-resolution                         & AMIP     & 1981-2000  \\
-CAM3 (T85)       & Spectral high-resolution                        & AMIP     & 1981-2000  \\
-CAM3 (2\deg)     & FV low-resolution                               & AMIP     & 1980-1999  \\
-CAM3-DIL (2\deg) & FV + CAPE dilution                              & AMIP     & 1980-1999  \\
-CAM3-CMT (2\deg) & FV + convective momentum transports             & AMIP     & 1980-1999  \\
-CAM3-CONV (2\deg)& FV + convective changes (CMT+DIL)               & AMIP     & 1980-1999  \\
-CAM3.5 (2\deg)   & Interim CAM release: \citep{CCSM3.5}            & AMIP     & 1979-2005  \\
-                 & FV-CONV+freeze drying+cloud fraction update     &          &            \\
-CAM4 (2\deg)     & FV low-resolution                               & AMIP     & 1981-2000  \\
-CAM4 (1\deg)     & FV high resolution                              & AMIP     & 1981-2000  \\
+Name & Description & SST  & Forcing Use Case \\
 \hline
-CCSM3 (T85)      & Spectral high-resolution                        & Coupled  & 1970-1999  \\
-CCSM4 (2\deg)    & FV low-resolution                               & Coupled  & 1970-1999  \\
-CCSM4 (1\deg)    & FV high-resolution                              & Coupled  & 1970-1999  \\
+rC5    & CAM5 physics (-phys cam5)     & AMIP & Historical   \\
+rC5   & CAM5 physics (rC5+ZMtune)      & AMIP & Historical   \\
+rC5t   & CAM5 physics (rC5+ZMtune+topo)& AMIP & Historical   \\
+rC5p   & CAM5 parameters only          & AMIP & Historical  \\
+rC5pm  & rC5p + (mac/mic sub-step = 1) & AMIP & Historical  \\
+rUW    & UW PBL/Sh Conv. only.         & AMIP & Historical  \\
+rUWp   & UW PBL/Sh Conv. + parameters  & AMIP & Historical  \\
+rMG1   & MG1 microphysics              & AMIP & Historical  \\
+rice   & Nucleate in-cloud             & AMIP & Historical  \\
+rpfrac & Max-cloud precip overlap.     & AMIP & Historical  \\
+rZMc   & Capeten=5                     & AMIP & Historical  \\
+rZMp   & Parameters only.              & AMIP & Historical  \\
+rGW    & Isotropic GWD                 & AMIP & Historical \\
+rTMS   & Turbulent Mountain Stress     & AMIP & Historical \\
+rM3    & MAM3 aerosols + CMIP5 forcings& AMIP & Historical \\
+rL30   & 30 vertical levels            & AMIP & Historical \\
+CE2sst & SSTs Specified from CE2       & AMIP from Coupled & Historical \\
 \hline
 \end{tabular}
-\end{sidewaystable}
+\end{center}
+\end{table}
+
+
